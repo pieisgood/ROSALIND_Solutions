@@ -75,3 +75,38 @@ def StringGroup( inString, start, stop ):
 
     return outString
 
+def GCcontent( dna ):
+    gcContent = 0.0
+    for x in range(0, len(dna)):
+        if dna[x] == 'G' or dna[x] == 'C':
+            gcContent = gcContent + 1.0
+    return  gcContent/len(dna) * 100
+
+def PrintGCcontent( FASTA ):
+
+    for x in FASTA:
+        content = GCcontent( x[1] )
+        print x[0]
+        print content
+
+def FASTAImport( inFile ):
+    dnaAssociation = []
+    holder = open(inFile, 'r')
+    notDone = True
+    
+    while notDone:
+        name = holder.readline()
+        dna = holder.readline()
+        name = name[1:len(name)-1]
+        dna = dna[0:len(dna)]
+
+        if name != '':
+            dnaAssociation.append([name, dna])
+        else:
+            notDone = False
+
+    return dnaAssociation
+
+PrintGCcontent( FASTAImport( 'rosalind_gc.txt' ) )
+            
+
