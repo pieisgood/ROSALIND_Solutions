@@ -77,6 +77,7 @@ def StringGroup( inString, start, stop ):
 
 def GCcontent( dna ):
     gcContent = 0.0
+    
     for x in range(0, len(dna)):
         if dna[x] == 'G' or dna[x] == 'C':
             gcContent = gcContent + 1.0
@@ -85,28 +86,55 @@ def GCcontent( dna ):
 def PrintGCcontent( FASTA ):
 
     for x in FASTA:
+        #print x
         content = GCcontent( x[1] )
         print x[0]
         print content
+
+def CompareOverLapO3(tail, head):
+    if tail[1][len(tail[1])-3:len(tail[1])] == head[1][0:3]:
+        return True
+    else:
+        return False
+
+def OverLapGraph( FASTA ):
+
+    for x in FASTA:
+        for y in FASTA:
+            if x[0] != y[0]:
+                edge = CompareOverLapO3(x, y)
+                if edge:
+                    print x[0] + ' ' + y[0]
+                    
 
 def FASTAImport( inFile ):
     dnaAssociation = []
     holder = open(inFile, 'r')
     notDone = True
+    sum_name = ''
+    rosalind = holder.readline()
+    rosalind = rosalind[1:len(rosalind)-1]
+    dna = ''
     
     while notDone:
         name = holder.readline()
-        dna = holder.readline()
+        chain = name[0:len(name)-1]
         name = name[1:len(name)-1]
-        dna = dna[0:len(dna)]
-
-        if name != '':
-            dnaAssociation.append([name, dna])
-        else:
+        if name != '' and name[0:8] != 'Rosalind':
+            sum_name = sum_name + chain
+        elif name != '' and name[0:8] == 'Rosalind':
+            dna = [rosalind, sum_name]
+            dnaAssociation.append(dna)
+            rosalind = name
+            sum_name = ''
+            name = ''
+        elif name == '':
             notDone = False
+            dna = [rosalind, sum_name]
+            dnaAssociation.append(dna)
 
     return dnaAssociation
 
-PrintGCcontent( FASTAImport( 'rosalind_gc.txt' ) )
+OverLapGraph( FASTAImport('rosalind_grph.txt') )
             
 
