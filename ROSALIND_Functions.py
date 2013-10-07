@@ -29,6 +29,15 @@ def RabbitRecurrence( numMonths, numOffspring ):
         
     return rabbits[0] + rabbits[1]
 
+def MendelianProb(k, m, n):
+    total = k + m + n
+    MProb = 0
+    MProb = MProb + ((n*(n-1.0))/(total*(total - 1.0)))
+    MProb = MProb + (m*n)/(total*(total - 1.0))
+    MProb = MProb + (1.0/4.0)*((m*(m-1.0))/(total*(total - 1.0)))
+    MProb = 1.0 - MProb
+    return MProb
+
 def AtoY ( rab , mult):
     young = rab[0]*mult
     adults = rab[1] + rab[0]
@@ -135,6 +144,6 @@ def FASTAImport( inFile ):
 
     return dnaAssociation
 
-OverLapGraph( FASTAImport('rosalind_grph.txt') )
+print MendelianProb(21.0,18.0,27.0)
             
 
